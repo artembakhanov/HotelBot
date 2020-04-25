@@ -18,6 +18,7 @@ class User(models.Model):
     last_name = models.TextField()
     username = models.TextField()
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default=1)
+    state = models.PositiveSmallIntegerField(default=0)
 
 
 class HotelInfo(models.Model):
