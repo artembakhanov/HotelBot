@@ -3,13 +3,6 @@ from django.db import models
 
 
 # Create your models here.
-class User(models.Model):
-    telegram_id = models.IntegerField()
-    first_name = models.TextField()
-    last_name = models.TextField()
-    username = models.TextField()
-
-
 class Hotel(models.Model):
     name = models.TextField()
     admin_telegram_id = models.IntegerField()
@@ -17,6 +10,14 @@ class Hotel(models.Model):
 
     def __str__(self):
         return f"Hotel \"{self.name}\""
+
+
+class User(models.Model):
+    telegram_id = models.IntegerField()
+    first_name = models.TextField()
+    last_name = models.TextField()
+    username = models.TextField()
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default=1)
 
 
 class HotelInfo(models.Model):
@@ -27,6 +28,7 @@ class HotelInfo(models.Model):
 class RoomCategory(models.Model):
     class Meta:
         verbose_name_plural = "Room categories"
+
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     name = models.TextField()
     min_price = models.PositiveIntegerField()
