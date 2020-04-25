@@ -8,6 +8,6 @@ def save_user(function):
             defaults={"first_name": m.from_user.first_name, "last_name": m.from_user.last_name,
                       "username": m.from_user.username}
         )
-        return function(m, user, *args, **kwargs)
+        return function(m, user[0], *args, **kwargs)
 
     return wrapper
