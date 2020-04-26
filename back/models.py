@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, EmailValidator
 from django.db import models
 
 
@@ -39,10 +39,14 @@ class Room(models.Model):
     room_category = models.ForeignKey(RoomCategory, on_delete=models.PROTECT)
     name = models.TextField()
 
+    def __str__(self):
+        return f"Room \"{self.name}\""
+
 
 class Booking(models.Model):
     room = models.ForeignKey(Room, on_delete=models.PROTECT)
-    confirmation_number = models.TextField(validators=[RegexValidator("[0-9]{8}")])
+    confirmation_number = models.CharField(max_length=8, validators=[
+        RegexValidator('[0-9]{8}', message="It should be eight digits.")])
     date_check_in = models.DateTimeField()
     date_check_out = models.DateTimeField()
-    active = models.BooleanField(default=False, auto_created=True)
+    active = models.BooleanField(default=True, auto_created=True)
