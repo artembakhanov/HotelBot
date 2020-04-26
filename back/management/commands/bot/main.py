@@ -3,7 +3,7 @@ import re
 import telebot
 
 from HotelManagementBot import settings
-from back.models import User as User_
+from back.models import User as User_, Booking
 from .static import *
 from .wrappers import save_user
 
@@ -35,9 +35,23 @@ def main():
         match = re.fullmatch(r'([0-9]+)\s+([0-9]{8})', m.text)
         if match:
             booking_id, confirmation_code = match.groups()
-            bot.send_message(m.chat.id, "Here it should be your booking.")
             user.state = State.DEFAULT.value
             user.save()
+
+            try:
+                booking = Booking.objects.get(id=booking_id, confirmation_number=confirmation_code)
+                sym = "" if booking.active else "~"
+                bot.send_message(
+                    m.chat.id,
+                    f"📖 {sym}Booking{sym} *\\#{booking.id}*\n\n"
+                    f"🛏 Room: {booking.room.name}\n"
+                    f"{'✅ The booking is active' if booking.active else '❌ The booking is cancelled'}",
+                    parse_mode="MarkdownV2",
+                    reply_markup=BOOKING_BUTTONS(booking.id)
+                )
+            except Booking.DoesNotExist:
+                bot.send_message(m.chat.id, "The booking with such id and the confirmation code does not exist.\n"
+                                            "Please try again.")
             # send booking here
         else:
             bot.send_message(m.chat.id,
