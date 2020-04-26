@@ -31,3 +31,4 @@ It was written on Python 3.7 using django framework.
   `	python manage.py runserver`
 
 The database is already created so you can go to localhost:8000/admin and use "**artem**" as username and "**test1234**" as password.
+Please, note that you need to have environmental variable called **TELEGRAM_TOKEN**, which contains the access token of your bot.
