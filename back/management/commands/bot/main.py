@@ -19,7 +19,8 @@ def main():
     @save_user
     def start(m, user):
         bot.send_message(m.chat.id,
-                         f"Hello, {user.first_name}! Welcome to the Hotel Management Bot. Use the menu keyboard below to navigate.\n"
+                         f"Hello, {user.first_name}!\n\n"
+                         f"Welcome to the Hotel Management Bot. Use the menu keyboard below to navigate.\n"
                          f"For now your account is attached to Hotel 1.",
                          reply_markup=MAIN_MENU)
 
@@ -41,10 +42,12 @@ def main():
     @bot.message_handler(content_types=['text'],
                          func=lambda m: User_.objects.get(telegram_id=m.from_user.id).state == State.BOOKING_CODE.value)
     @save_user
-    def provide_hotel_info(m, user):
+    def provide_booking_info(m, user):
         match = re.fullmatch(r'([0-9]+)\s+([0-9]{8})', m.text)
         if match:
             booking_id, confirmation_code = match.groups()
+            user.state = State.DEFAULT.value
+            user.save()
             try:
                 booking = Booking.objects.get(id=booking_id, confirmation_number=confirmation_code)
                 sym = "" if booking.active else "~"
@@ -56,8 +59,6 @@ def main():
                     parse_mode="MarkdownV2",
                     reply_markup=BOOKING_BUTTONS(booking.id)
                 )
-                user.state = State.DEFAULT.value
-                user.save()
             except Booking.DoesNotExist:
                 bot.send_message(m.chat.id, "The booking with such id and the confirmation code does not exist.\n"
                                             "Please try again.")
