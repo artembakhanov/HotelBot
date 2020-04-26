@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator, EmailValidator
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -50,3 +50,9 @@ class Booking(models.Model):
     date_check_in = models.DateTimeField()
     date_check_out = models.DateTimeField()
     active = models.BooleanField(default=True, auto_created=True)
+
+
+class Question(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    message_id = models.IntegerField()
