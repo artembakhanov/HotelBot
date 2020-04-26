@@ -54,5 +54,7 @@ class Booking(models.Model):
 
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    message_id = models.IntegerField()
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True)
+    content = models.TextField(default=None, null=True)
+    answer = models.TextField(default=None, auto_created=True, null=True)
+    message_id = models.IntegerField(default=None, auto_created=True, null=True)
