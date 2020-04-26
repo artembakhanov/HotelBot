@@ -26,4 +26,4 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ("room", "confirmation_number", "active")
+    list_display = ("id", "room", "confirmation_number", "active")
