@@ -34,6 +34,9 @@ class RoomCategory(models.Model):
     name = models.TextField()
     min_price = models.PositiveIntegerField()
 
+    def __str__(self):
+        return self.name
+
 
 class Room(models.Model):
     room_category = models.ForeignKey(RoomCategory, on_delete=models.PROTECT)
